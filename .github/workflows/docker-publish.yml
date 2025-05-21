@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  USERNAME: devilocheek   # <- твій GitHub логін у нижньому регістрі
+  USERNAME: devilocheek 
 
 jobs:
   build-and-push:
