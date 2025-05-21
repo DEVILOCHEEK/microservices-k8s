@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: product-service
-        image: ghcr.io/<your-username>/product-service:latest
+        image: ghcr.io/DEVILOCHEEK/product-service:latest
         ports:
         - containerPort: 5000
 ---
