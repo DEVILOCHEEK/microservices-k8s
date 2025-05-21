@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  USERNAME: DEVILOCHEEK 
+  USERNAME: devilocheek 
 
 jobs:
   build-and-push:
