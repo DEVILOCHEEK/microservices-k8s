@@ -1,25 +1,42 @@
-name: Build and Push to GHCR
+name: Build and Publish Docker Images
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [user-service, product-service, order-service]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest ./${{ matrix.service }}
-          docker push ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set lowercase username
+      run: echo "USERNAME=$(echo '${{ github.actor }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ env.USERNAME }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push user-service image
+      run: |
+        docker build -t ${{ env.REGISTRY }}/${{ env.USERNAME }}/user-service:latest ./user-service
+        docker push ${{ env.REGISTRY }}/${{ env.USERNAME }}/user-service:latest
+
+    - name: Build and push product-service image
+      run: |
+        docker build -t ${{ env.REGISTRY }}/${{ env.USERNAME }}/product-service:latest ./product-service
+        docker push ${{ env.REGISTRY }}/${{ env.USERNAME }}/product-service:latest
+
+    - name: Build and push order-service image
+      run: |
+        docker build -t ${{ env.REGISTRY }}/${{ env.USERNAME }}/order-service:latest ./order-service
+        docker push ${{ env.REGISTRY }}/${{ env.USERNAME }}/order-service:latest
