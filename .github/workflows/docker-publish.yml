@@ -22,7 +22,7 @@ jobs:
       with:
         registry: ${{ env.REGISTRY }}
         username: ${{ env.USERNAME }}
-        password: ${{ secrets.CR_PAT }}  # <- персональний токен, доданий у Secrets
+        password: ${{ secrets.CR_PAT }}
 
     - name: Build and push user-service image
       run: |
